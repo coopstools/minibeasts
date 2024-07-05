@@ -5,6 +5,7 @@ import (
 	"github.com/coopstools/minibeast/app/actions"
 	"github.com/coopstools/minibeast/app/beast"
 	"strconv"
+	"time"
 )
 
 func main() {
@@ -44,10 +45,12 @@ func askForPet(f beast.Factory) beast.Pet {
 
 func randomEncounter(pet, opp beast.Pet) (beast.Pet, beast.Pet) {
 	act := actions.BuildActionSet()
+	fmt.Println(pet.Name + " encountered a " + opp.Name)
+
+	var sel string
 	for {
 		fmt.Printf("\n%s\n%s\n", pet, opp)
 		listOptions(act.GetOps())
-		var sel string
 		fmt.Print("Choose your action: ")
 		_, _ = fmt.Scanln(&sel)
 		seli, _ := strconv.Atoi(sel)
@@ -62,9 +65,10 @@ func randomEncounter(pet, opp beast.Pet) (beast.Pet, beast.Pet) {
 			break
 		}
 
-		fmt.Printf("\n%s\n%s\n", pet, opp)
+		time.Sleep(1 * time.Second)
+		fmt.Printf("\n%s\n%s\n", opp, pet)
 		fmt.Println("Opponents turn")
-		pet, opp = act.Op(0)(pet, opp)
+		pet, opp = act.Op(0)(opp, pet)
 
 		if pet.Hp() <= 0 {
 			fmt.Println(pet.Name + " has fainted. You loose.")

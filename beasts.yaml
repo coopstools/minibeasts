@@ -1,6 +1,7 @@
 link:
   dex: https://pokemondb.net/pokedex/all
   calc: https://gamefaqs.gamespot.com/gameboy/367023-pokemon-red-version/faqs/64175/damage-calculation
+  moves: https://gamefaqs.gamespot.com/gameboy/367023-pokemon-red-version/faqs/64175/move-list#quick-attack
 beasts:
   Tiny Dragon:
     starter: true
@@ -9,7 +10,7 @@ beasts:
       hp: 39
       att: 52
       def: 43
-      spAtt: 60
+      spAtt: 50
       spDef: 50
       spd: 65
   Tiny Leviathon:
@@ -20,7 +21,7 @@ beasts:
       att: 48
       def: 65
       spAtt: 50
-      spDef: 64
+      spDef: 50
       spd: 43
   Tiny Treant:
     starter: true
