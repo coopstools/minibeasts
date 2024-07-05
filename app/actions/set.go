@@ -3,6 +3,7 @@ package actions
 import (
 	"fmt"
 	"github.com/coopstools/minibeast/app/beast"
+	"math/rand"
 )
 
 type Action func(active, passive beast.Pet) (beast.Pet, beast.Pet)
@@ -44,16 +45,18 @@ func Attack(attacker, defender beast.Pet) (beast.Pet, beast.Pet) {
 	L := 1  //attacker's level
 	P := 40 //power of attack; using scratch
 
-	//baseDmg := (((L * 2) / 5) * P * A) / (50 * D)
-	baseDmg := (2 * L * P * A) / (250 * D)
-	if baseDmg >= 997 {
-		baseDmg = 997
+	dmg := L * 2 / 5
+	dmg += 2
+	dmg *= P * A
+	dmg /= D
+	dmg /= 50
+	dmg += 2
+	if dmg >= 999 {
+		dmg = 999
 	}
-	baseDmg += 2
 
-	//r := rand.Intn(39) + 217
-	//dmg := baseDmg * r / 255
-	dmg := baseDmg
+	r := rand.Intn(39) + 236 //should be in the range 217 to 255, but I changed it
+	dmg = dmg * r / 255
 	fmt.Printf("%s takes %d damage.\n", defender.Name, dmg)
 	defender = defender.OffsetHP(-1 * dmg)
 	return attacker, defender
