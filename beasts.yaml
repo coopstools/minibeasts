@@ -1,0 +1,44 @@
+link:
+  dex: https://pokemondb.net/pokedex/all
+  calc: https://gamefaqs.gamespot.com/gameboy/367023-pokemon-red-version/faqs/64175/damage-calculation
+beasts:
+  Tiny Dragon:
+    starter: true
+    mainType: fire
+    baseStats:
+      hp: 39
+      att: 52
+      def: 43
+      spAtt: 60
+      spDef: 50
+      spd: 65
+  Tiny Leviathon:
+    starter: true
+    mainType: water
+    baseStats:
+      hp: 44
+      att: 48
+      def: 65
+      spAtt: 50
+      spDef: 64
+      spd: 43
+  Tiny Treant:
+    starter: true
+    mainType: grass
+    baseStats:
+      hp: 45
+      att: 49
+      def: 49
+      spAtt: 65
+      spDef: 65
+      spd: 45
+  Brown Robin:
+    maintype: normal
+    subtype: flying
+    baseStats:
+      hp: 40
+      att: 45
+      def: 40
+      spAtt: 35
+      spDef: 35
+      spd: 56
