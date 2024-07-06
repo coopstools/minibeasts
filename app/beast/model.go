@@ -30,11 +30,11 @@ type Pet struct {
 }
 
 func (p Pet) Att() int {
-	return p.base.Att * (p.current.Att + 2) / 2
+	return calcModified(p.base.Att, p.current.Att)
 }
 
 func (p Pet) Def() int {
-	return p.base.Def * (p.current.Def + 2) / 2
+	return calcModified(p.base.Def, p.current.Def)
 }
 
 func (p Pet) Hp() int {
@@ -112,4 +112,14 @@ func fillRatio(b []rune, f, s int) []rune {
 		b[halfWay-lf+j] = r
 	}
 	return b
+}
+
+func calcModified(base, stage int) int {
+	if stage == 0 {
+		return base
+	}
+	if stage > 0 {
+		return base * (2 + stage) / 2
+	}
+	return base * 2 / (2 - stage)
 }

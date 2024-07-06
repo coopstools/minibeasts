@@ -16,7 +16,7 @@ beasts:
     starterMoves:
       - Scratch
       - Growl
-  Tiny Leviathon:
+  Tiny Leviathan:
     starter: true
     mainType: water
     baseStats:

@@ -48,7 +48,6 @@ func BuildAttack(attName string, powerOfAtt int) Action {
 			A = 1
 		}
 		L := 1 //attacker's level
-		// P := 40 //power of attack; using scratch
 
 		dmg := L * 2 / 5
 		dmg += 2
@@ -71,13 +70,13 @@ func BuildAttack(attName string, powerOfAtt int) Action {
 func TailWhip(ctx util.GameCtx, attacker, defender beast.Pet) (beast.Pet, beast.Pet) {
 	ctx.Print(attacker.Name + " uses Tail Whip!\n")
 	ctx.Print(defender.Name + "'s defense drops.\n")
-	defender.ModDef(-1)
+	defender = defender.ModDef(-1)
 	return attacker, defender
 }
 
 func Growl(ctx util.GameCtx, attacker, defender beast.Pet) (beast.Pet, beast.Pet) {
 	ctx.Print(attacker.Name + " uses growl!\n")
 	ctx.Print(defender.Name + "'s attack drops.\n")
-	defender.ModAtt(-1)
+	defender = defender.ModAtt(-1)
 	return attacker, defender
 }
