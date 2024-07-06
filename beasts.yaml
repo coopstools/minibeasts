@@ -13,6 +13,9 @@ beasts:
       spAtt: 50
       spDef: 50
       spd: 65
+    starterMoves:
+      - Scratch
+      - Growl
   Tiny Leviathon:
     starter: true
     mainType: water
@@ -23,6 +26,9 @@ beasts:
       spAtt: 50
       spDef: 50
       spd: 43
+    starterMoves:
+      - Tackle
+      - Tail Whip
   Tiny Treant:
     starter: true
     mainType: grass
@@ -33,6 +39,9 @@ beasts:
       spAtt: 65
       spDef: 65
       spd: 45
+    starterMoves:
+      - Tackle
+      - Growl
   Brown Robin:
     maintype: normal
     subtype: flying
@@ -43,3 +52,5 @@ beasts:
       spAtt: 35
       spDef: 35
       spd: 56
+    starterMoves:
+      - Gust

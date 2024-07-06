@@ -13,7 +13,7 @@ type Factory struct {
 
 func (f Factory) BuildPet(petName, beastName string) Pet {
 	b := f.Beasts[beastName]
-	p := Pet{Name: petName, base: b.BaseStats}
+	p := Pet{Name: petName, base: b.BaseStats, Moves: b.StarterMoves}
 	p.current.HP = p.base.HP
 	return p
 }

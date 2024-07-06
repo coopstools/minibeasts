@@ -6,10 +6,11 @@ import (
 )
 
 type Beast struct {
-	IsStarter bool `yaml:"starter"`
-	MainType  string
-	SubType   string
-	BaseStats Stats `yaml:"baseStats"`
+	IsStarter    bool `yaml:"starter"`
+	MainType     string
+	SubType      string
+	BaseStats    Stats    `yaml:"baseStats"`
+	StarterMoves []string `yaml:"starterMoves"`
 }
 
 type Stats struct {
@@ -25,18 +26,45 @@ type Pet struct {
 	Name    string
 	base    Stats
 	current Stats
+	Moves   []string
 }
 
 func (p Pet) Att() int {
-	return p.base.Att + p.current.Att
+	return p.base.Att * (p.current.Att + 2) / 2
 }
 
 func (p Pet) Def() int {
-	return p.base.Def + p.current.Def
+	return p.base.Def * (p.current.Def + 2) / 2
 }
 
 func (p Pet) Hp() int {
 	return p.current.HP
+}
+
+func (p Pet) ModDef(v int) Pet {
+	p.current.Def += v
+	if p.current.Def > 6 {
+		p.current.Def = 6
+		return p
+	}
+	if p.current.Def > -6 {
+		return p
+	}
+	p.current.Def = -6
+	return p
+}
+
+func (p Pet) ModAtt(v int) Pet {
+	p.current.Att += v
+	if p.current.Att > 6 {
+		p.current.Att = 6
+		return p
+	}
+	if p.current.Att > -6 {
+		return p
+	}
+	p.current.Att = -6
+	return p
 }
 
 func (p Pet) OffsetHP(v int) Pet {

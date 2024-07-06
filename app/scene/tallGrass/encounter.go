@@ -24,22 +24,24 @@ func RandomEncounter(ctx util.GameCtx, f beast.Factory, pet beast.Pet) beast.Pet
 	ctx.Printf(encounterDialogue, opp.Name, pet.Name)
 
 	act := actions.BuildActionSet()
-	var sel string
+	var sel, attName string
+	var seli int
 	for {
 		ctx.Printf(combatantDisplay, pet, opp)
-		util.ListOptions(ctx, act.GetOps())
+		util.ListOptions(ctx, pet.Moves)
 		ctx.Printf(selectActionReq, pet.Name)
 		_, _ = fmt.Fscanln(ctx, &sel)
-		seli, _ := strconv.Atoi(sel)
-		pet, opp = act.Op(seli)(pet, opp)
+		seli, _ = strconv.Atoi(sel)
+		attName = pet.Moves[seli]
+		pet, opp = act.Op(attName)(ctx, pet, opp)
 		if isFightOver(ctx, pet, opp) {
 			break
 		}
 
 		time.Sleep(1 * time.Second)
 
-		oppAction := 0
-		pet, opp = act.Op(oppAction)(opp, pet)
+		attName = opp.Moves[0]
+		opp, pet = act.Op(attName)(ctx, opp, pet)
 		if isFightOver(ctx, pet, opp) {
 			break
 		}
