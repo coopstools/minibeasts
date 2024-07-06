@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	openingDialogue            = "==========Enter Wilderness==========\nYou wonder out of town into the dangers of the tall grass."
+	openingDialogue            = "==========Enter Wilderness==========\nYou wonder out of town into the dangers of the tall grass.\n"
 	creatureType, creatureName = "Wild Brown Robin", "Brown Robin"
 	encounterDialogue          = "You hear the rustling of leaves and spot a %s. %s prepare to battle.\n"
 	combatantDisplay           = "\n%s\n%s\n"
@@ -18,17 +18,17 @@ const (
 )
 
 func RandomEncounter(ctx util.GameCtx, f beast.Factory, pet beast.Pet) beast.Pet {
-	_, _ = fmt.Fprintln(ctx, openingDialogue)
+	ctx.Print(openingDialogue)
 
 	opp := f.BuildPet(creatureType, creatureName)
-	_, _ = fmt.Fprintf(ctx, encounterDialogue, opp.Name, pet.Name)
+	ctx.Printf(encounterDialogue, opp.Name, pet.Name)
 
 	act := actions.BuildActionSet()
 	var sel string
 	for {
-		_, _ = fmt.Fprintf(ctx, combatantDisplay, pet, opp)
+		ctx.Printf(combatantDisplay, pet, opp)
 		util.ListOptions(ctx, act.GetOps())
-		_, _ = fmt.Fprintf(ctx, selectActionReq, pet.Name)
+		ctx.Printf(selectActionReq, pet.Name)
 		_, _ = fmt.Fscanln(ctx, &sel)
 		seli, _ := strconv.Atoi(sel)
 		pet, opp = act.Op(seli)(pet, opp)
@@ -49,11 +49,11 @@ func RandomEncounter(ctx util.GameCtx, f beast.Factory, pet beast.Pet) beast.Pet
 
 func isFightOver(ctx util.GameCtx, pet, opp beast.Pet) bool {
 	if pet.Hp() <= 0 {
-		_, _ = fmt.Fprintln(ctx, pet.Name+" has fainted. You loose.")
+		ctx.Print(pet.Name + " has fainted. You loose.\n")
 		return true
 	}
 	if opp.Hp() <= 0 {
-		_, _ = fmt.Fprintln(ctx, opp.Name+" has fainted. You win.")
+		ctx.Print(opp.Name + " has fainted. You win.\n")
 		return true
 	}
 	return false

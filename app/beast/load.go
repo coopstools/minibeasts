@@ -18,8 +18,8 @@ func (f Factory) BuildPet(petName, beastName string) Pet {
 	return p
 }
 
-func CreateFactory() Factory {
-	yamlFile, err := os.ReadFile("beasts.yaml")
+func CreateFactory(filePath string) Factory {
+	yamlFile, err := os.ReadFile(filePath)
 	if err != nil {
 		log.Printf("could not read file err   #%v ", err)
 	}

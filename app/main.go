@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	beastFactory := beast.CreateFactory()
+	beastFactory := beast.CreateFactory("beasts.yaml")
 	ctx := util.GameCtx{Writer: os.Stdout, Reader: os.Stdin}
 
 	_, _ = fmt.Fprintln(ctx, "~~~WELCOME TO THE WORLD OF MINI BEASTS~~~")
