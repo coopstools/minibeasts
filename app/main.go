@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/coopstools/minibeast/app/beast"
+	"github.com/coopstools/minibeast/app/engine"
 	"github.com/coopstools/minibeast/app/scene/drWillows"
 	RatallGrass "github.com/coopstools/minibeast/app/scene/tallGrass"
 	"github.com/coopstools/minibeast/app/scene/util"
@@ -11,6 +12,8 @@ import (
 )
 
 func main() {
+	engine.Display()
+
 	beastFactory := beast.CreateFactory("beasts.yaml")
 	ctx := util.GameCtx{Writer: os.Stdout, Reader: os.Stdin}
 
