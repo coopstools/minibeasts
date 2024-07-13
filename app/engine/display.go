@@ -17,14 +17,14 @@ func Display() {
 	}})
 	states[tgName] = tallGrassScene
 	bName, battleScene := battle.NewState()
-	states[bName] = battleScene
+	states[bName] = &battleScene
 	curState := tgName
 	game := Game{
 		curState:  &curState,
 		imgLookup: asset.LoadAssets(),
 		states:    states,
 	}
-	ebiten.SetWindowSize(500, 500)
+	ebiten.SetWindowSize(1200, 800)
 	ebiten.SetWindowTitle("Mini Beasts")
 	if err := ebiten.RunGame(game); err != nil {
 		log.Fatal(err)
@@ -53,6 +53,6 @@ func (g Game) Draw(screen *ebiten.Image) {
 }
 
 func (g Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
-	screenWidth, screenHeight = 500, 500
+	screenWidth, screenHeight = 1200, 800
 	return
 }
