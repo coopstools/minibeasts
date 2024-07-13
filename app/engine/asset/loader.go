@@ -1,4 +1,4 @@
-package engine
+package asset
 
 import (
 	"embed"
@@ -7,12 +7,12 @@ import (
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
 
-//go:embed asset/*
-var assetDir embed.FS
+//go:embed *.png
+var pngAssets embed.FS
 
 func LoadAssets() map[string]*ebiten.Image {
 	fmt.Println("Loading Assets")
-	dir, err := assetDir.ReadDir("asset")
+	dir, err := pngAssets.ReadDir(".")
 	if err != nil {
 		panic(err)
 	}
@@ -26,7 +26,7 @@ func LoadAssets() map[string]*ebiten.Image {
 			continue
 		}
 		assetName := f.Name()[:nl-4]
-		rawImg, err := assetDir.Open("asset/" + f.Name())
+		rawImg, err := pngAssets.Open(f.Name())
 		if err != nil {
 			panic(err)
 		}

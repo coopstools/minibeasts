@@ -1,4 +1,4 @@
-package engine
+package scene
 
 import (
 	"github.com/hajimehoshi/ebiten/v2"
@@ -13,6 +13,8 @@ const (
 	dirDown  byte = 2
 	dirLeft  byte = 0
 	dirRight byte = 4
+
+	speed = 2
 )
 
 type Sprite struct {
@@ -30,9 +32,9 @@ func (s *Sprite) MoveRight() {
 	s.dir = s.dir&0xF9 + dirRight
 	switch {
 	case s.vx16 <= 0:
-		s.vx16 = 1
+		s.vx16 = speed
 	case s.vx16 <= 8:
-		s.vx16 += 1
+		s.vx16 += speed
 	}
 	s.x16 += s.vx16
 	if s.x16 > 3200 {
@@ -44,9 +46,9 @@ func (s *Sprite) MoveLeft() {
 	s.dir = s.dir&0xF9 + dirLeft
 	switch {
 	case s.vx16 >= 0:
-		s.vx16 = -1
+		s.vx16 = -speed
 	case s.vx16 >= -8:
-		s.vx16 -= 1
+		s.vx16 -= speed
 	}
 	s.x16 += s.vx16
 	if s.x16 < 0 {
@@ -58,9 +60,9 @@ func (s *Sprite) MoveDown() {
 	s.dir = s.dir&0xF9 + dirDown
 	switch {
 	case s.vy16 <= 0:
-		s.vy16 = 1
+		s.vy16 = speed
 	case s.vy16 <= 8:
-		s.vy16 += 1
+		s.vy16 += speed
 	}
 	s.y16 += s.vy16
 	if s.y16 > 3200 {
@@ -72,9 +74,9 @@ func (s *Sprite) MoveUp() {
 	s.dir = s.dir&0xF9 + dirUp
 	switch {
 	case s.vy16 >= 0:
-		s.vy16 = -1
+		s.vy16 = -speed
 	case s.vy16 >= -8:
-		s.vy16 -= 1
+		s.vy16 -= speed
 	}
 	s.y16 += s.vy16
 	if s.y16 < 0 {

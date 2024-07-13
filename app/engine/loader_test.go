@@ -2,7 +2,7 @@ package engine_test
 
 import (
 	"embed"
-	"fmt"
+	asset2 "github.com/coopstools/minibeast/app/engine/asset"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -11,13 +11,6 @@ import (
 var asset embed.FS
 
 func TestLoadAssets(t *testing.T) {
-	dir, err := asset.ReadDir("asset")
-	if err != nil {
-		panic(err)
-	}
-
-	for _, o := range dir {
-		fmt.Println(!o.IsDir(), ":", o.Name())
-	}
+	asset2.LoadFont()
 	assert.Fail(t, "It's gonna happen")
 }
