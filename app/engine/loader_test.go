@@ -2,7 +2,7 @@ package engine_test
 
 import (
 	"embed"
-	asset2 "github.com/coopstools/minibeast/app/engine/asset"
+	asset2 "github.com/coopstools/minibeast/app/asset"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

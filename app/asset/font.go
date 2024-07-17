@@ -30,6 +30,11 @@ func (b *Builder) Finish(drawImage func(img *ebiten.Image, options *ebiten.DrawI
 	drawImage(b.img, opt)
 }
 
+func LoadFont() *truetype.Font {
+	loadedFont, _ := truetype.Parse(fontFile)
+	return loadedFont
+}
+
 func NewBuilder(numLines int) Builder {
 	width, height := 300, 16*numLines
 

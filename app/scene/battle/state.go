@@ -1,15 +1,20 @@
 package battle
 
 import (
-	"github.com/coopstools/minibeast/app/engine/asset"
+	"github.com/coopstools/minibeast/app/asset"
 	"github.com/coopstools/minibeast/app/scene"
+	"github.com/coopstools/minibeast/app/state"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
 type State struct {
+	mvSelPopup Popup2x2
+
 	cursorPos int
 	frame     int8
 	pressed   *pressed
+
+	sharedState *state.Shared
 }
 
 type pressed struct {
@@ -24,37 +29,37 @@ func (s *State) Update(isPressed func(key ebiten.Key) bool) (string, error) {
 	}
 	s.pressed = nil
 	if isPressed(ebiten.KeyEscape) {
+		s.sharedState.SetSelected(s.mvSelPopup.PullCurrent())
 		return scene.TALL_GRASS_STATE, nil
 	}
-	if isPressed(ebiten.KeyW) {
-		s.cursorPos += 1
+	for _, k := range []struct {
+		mv  func()
+		key ebiten.Key
+	}{
+		{mv: s.mvSelPopup.MoveUp, key: ebiten.KeyW},
+		{mv: s.mvSelPopup.MoveUp, key: ebiten.KeyS},
+		{mv: s.mvSelPopup.MoveLeft, key: ebiten.KeyA},
+		{mv: s.mvSelPopup.MoveLeft, key: ebiten.KeyD},
+	} {
+		if !isPressed(k.key) {
+			continue
+		}
+		k.mv()
 		s.pressed = &pressed{
-			key:  ebiten.KeyW,
+			key:  k.key,
 			time: 20,
 		}
 	}
-	if isPressed(ebiten.KeyS) {
-		s.cursorPos -= 1
-		s.pressed = &pressed{
-			key:  ebiten.KeyS,
-			time: 20,
-		}
-	}
-	s.cursorPos %= 3
 	return scene.BATTLE_STATE, nil
 }
 
-func (s *State) Draw(screen *ebiten.Image, imgLookup map[string]*ebiten.Image) {
-	textBuilder := asset.NewBuilder(3)
-	carrot := []string{">", " ", " "}
-	for i, line := range []string{
-		"A Line for testing!", "And another line!!!", "A line to finish things out.",
-	} {
-		textBuilder.Println(carrot[((i+s.cursorPos)%3+3)%3] + line)
-	}
-	textBuilder.Finish(screen.DrawImage)
+func (s *State) Draw(screen *ebiten.Image) {
+	selImg := s.mvSelPopup.Draw()
+	screen.DrawImage(selImg, &ebiten.DrawImageOptions{})
 }
 
-func NewState() (string, State) {
-	return scene.BATTLE_STATE, State{}
+func NewState(s *state.Shared) (string, State) {
+	// popup := New2x2Popup(asset.LoadFont(), []string{"Tail Whip", "Growl", "Tackl", "Quick Strike"}, 200, 200)
+	popup := New2x2Popup(asset.LoadFont(), s.PullAvailable(), 300, 200)
+	return scene.BATTLE_STATE, State{mvSelPopup: popup, sharedState: s}
 }

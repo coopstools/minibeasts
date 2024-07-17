@@ -98,21 +98,45 @@ func (s *Sprite) UpdateLegs() {
 func (s *Sprite) DisplayNameAndOpt() (string, *ebiten.DrawImageOptions) {
 	scaleX, scaleY := 4.0, 4.0
 	transX, transY := float64(s.x16/8.0), float64(s.y16/8.0)
-	switch s.dir & 6 {
-	case 0:
-		//horizontal and left
+	var imgName string
+	switch s.dir & 7 {
+	case 0b000: //000
+		//horizontal and left, step1
+		imgName = "side1"
+		scaleX *= -1.0
+		transX += 64.
+	case 0b001:
+		//horizontal and left, step2
+		imgName = "side2"
+		scaleX *= -1.0
+		transX += 64.00
+	case 0b010:
+		//vertical and down, step1
+		imgName = "down"
+	case 0b011:
+		//vertical and down, step2
+		imgName = "down"
 		scaleX *= -1.0
 		transX += 64.0
-	case 2:
-		//vertical and down
-		scaleY *= -1.0
-		transY += 64.0
+	case 0b100:
+		//horizontal and right, step1
+		imgName = "side1"
+	case 0b101:
+		//horizontal and right, step2
+		imgName = "side2"
+	case 0b110:
+		//vertical and up, step1
+		imgName = "up"
+	case 0b111:
+		//vertical and up, step2
+		imgName = "up"
+		scaleX *= -1.0
+		transX += 64.0
 	}
 
 	opt := ebiten.DrawImageOptions{}
 	opt.GeoM.Scale(scaleX, scaleY)
 	opt.GeoM.Translate(transX, transY)
 
-	img := s.Imgs[s.dir&3]
-	return img, &opt
+	return imgName, &opt
 }
