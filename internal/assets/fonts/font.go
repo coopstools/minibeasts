@@ -1,17 +1,30 @@
-package asset
+package fonts
 
 import (
 	_ "embed"
-	"github.com/golang/freetype"
-	"github.com/golang/freetype/truetype"
-	"github.com/hajimehoshi/ebiten/v2"
 	"image"
 	"image/color"
 	"image/draw"
+	"os"
+
+	"github.com/golang/freetype"
+	"github.com/golang/freetype/truetype"
+	"github.com/hajimehoshi/ebiten/v2"
+	"golang.org/x/image/font"
 )
 
 //go:embed font.ttf
 var fontFile []byte
+
+func LoadFontFace() font.Face {
+	ttFont, err := truetype.Parse(fontFile)
+	if err != nil {
+		print(err)
+		os.Exit(1)
+	}
+	face := truetype.NewFace(ttFont, &truetype.Options{Size: 12})
+	return face
+}
 
 type Builder struct {
 	img        *ebiten.Image
