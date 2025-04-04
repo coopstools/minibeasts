@@ -1,7 +1,10 @@
 package engine
 
 import (
+	"os"
+
 	"github.com/coopstools/minibeast/internal/assets/fonts"
+	"github.com/coopstools/minibeast/internal/assets/images/tiles"
 	"github.com/coopstools/minibeast/internal/models"
 	"github.com/coopstools/minibeast/internal/scenes"
 	"github.com/coopstools/minibeast/internal/scenes/character_creation"
@@ -18,11 +21,18 @@ type Game struct {
 }
 
 func NewGame() *Game {
+	tiles, err := tiles.LoadTiles()
+	if err != nil {
+		print("failed to load tiles: %v", err)
+		os.Exit(1)
+	}
+
 	g := &Game{
 		state:  models.NewGameState(),
 		scenes: make(map[string]scenes.Scene),
 		assets: &scenes.SceneAssets{
-			Font: fonts.LoadFontFace(),
+			Font:  fonts.LoadFontFace(),
+			Tiles: tiles,
 		},
 	}
 
