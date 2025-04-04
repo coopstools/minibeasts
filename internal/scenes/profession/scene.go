@@ -53,8 +53,7 @@ func (s *Scene) Update() error {
 	// Handle profession selection
 	if inpututil.IsKeyJustPressed(ebiten.KeyEnter) {
 		s.gameState.Character.Profession = s.professions[s.selected]
-		// You can switch to the next scene here
-		// s.sceneManager.SwitchTo("next_scene")
+		s.sceneManager.SwitchTo("world")
 	}
 
 	return nil

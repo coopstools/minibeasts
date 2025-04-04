@@ -1,50 +1,34 @@
 package world
 
 import (
-	"fmt"
 	"math"
-	"os"
 
-	"github.com/coopstools/minibeast/internal/assets/images/tiles"
 	"github.com/coopstools/minibeast/internal/models"
-
+	"github.com/coopstools/minibeast/internal/scenes"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
 type Scene struct {
-	worldData  *models.WorldData
-	tileImages map[models.TileType]*ebiten.Image
+	worldData    *models.WorldData
+	gameState    *models.GameState
+	sceneManager scenes.SceneManager
 }
 
-func NewScene() *Scene {
+func NewScene(gameState *models.GameState, sceneManager scenes.SceneManager) *Scene {
 	// Calculate world size based on screen dimensions
 	worldWidth := 800 / 16  // Assuming 800px screen width
 	worldHeight := 600 / 16 // Assuming 600px screen height
 
 	scene := &Scene{
-		worldData:  models.NewWorldData(worldWidth, worldHeight),
-		tileImages: make(map[models.TileType]*ebiten.Image),
+		worldData:    models.NewWorldData(worldWidth, worldHeight),
+		gameState:    gameState,
+		sceneManager: sceneManager,
 	}
-
-	// Load tile images
-	scene.loadTileImages()
 
 	return scene
 }
 
-func (s *Scene) loadTileImages() {
-	tiles, err := tiles.Load()
-	if err != nil {
-		fmt.Println("failed to load tiles for world:", err)
-		os.Exit(2)
-	}
-
-	for tileType, tileImage := range tiles {
-		s.tileImages[models.TileType(tileType)] = ebiten.NewImageFromImage(tileImage)
-	}
-}
-
-func (s *Scene) Draw(screen *ebiten.Image) {
+func (s *Scene) Draw(screen *ebiten.Image, assets *scenes.SceneAssets) {
 	// Create options for drawing tiles
 	opt := &ebiten.DrawImageOptions{}
 
@@ -64,8 +48,10 @@ func (s *Scene) Draw(screen *ebiten.Image) {
 			}
 
 			// Draw the tile
-			tileImage := s.tileImages[tile.Type]
-			screen.DrawImage(tileImage, opt)
+			tileImage := assets.Tiles[string(tile.Type)]
+			//TODO: convert map of images to map of ebiten images
+			ebitImage := ebiten.NewImageFromImage(tileImage)
+			screen.DrawImage(ebitImage, opt)
 		}
 	}
 }

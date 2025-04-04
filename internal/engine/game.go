@@ -9,7 +9,7 @@ import (
 	"github.com/coopstools/minibeast/internal/scenes"
 	"github.com/coopstools/minibeast/internal/scenes/character_creation"
 	"github.com/coopstools/minibeast/internal/scenes/profession"
-
+	"github.com/coopstools/minibeast/internal/scenes/world"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
@@ -21,7 +21,7 @@ type Game struct {
 }
 
 func NewGame() *Game {
-	tiles, err := tiles.LoadTiles()
+	tiles, err := tiles.Load()
 	if err != nil {
 		print("failed to load tiles: %v", err)
 		os.Exit(1)
@@ -39,6 +39,7 @@ func NewGame() *Game {
 	// Initialize all scenes
 	g.scenes["character_creation"] = character_creation.NewScene(g.state, g)
 	g.scenes["profession"] = profession.NewScene(g.state, g)
+	g.scenes["world"] = world.NewScene(g.state, g)
 
 	// Set initial scene
 	g.currentScene = g.scenes["character_creation"]
