@@ -1,8 +1,6 @@
 package scenes
 
 import (
-	"image"
-
 	"github.com/hajimehoshi/ebiten/v2"
 	"golang.org/x/image/font"
 )
@@ -13,7 +11,7 @@ type SceneManager interface {
 
 type SceneAssets struct {
 	Font  font.Face
-	Tiles map[string]image.Image
+	Tiles map[string][]*ebiten.Image
 }
 
 type Scene interface {

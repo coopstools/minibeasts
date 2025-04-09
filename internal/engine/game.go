@@ -27,19 +27,21 @@ func NewGame() *Game {
 		os.Exit(1)
 	}
 
+	assets := &scenes.SceneAssets{
+		Font:  fonts.LoadFontFace(),
+		Tiles: tiles,
+	}
+
 	g := &Game{
 		state:  models.NewGameState(),
 		scenes: make(map[string]scenes.Scene),
-		assets: &scenes.SceneAssets{
-			Font:  fonts.LoadFontFace(),
-			Tiles: tiles,
-		},
+		assets: assets,
 	}
 
 	// Initialize all scenes
 	g.scenes["character_creation"] = character_creation.NewScene(g.state, g)
 	g.scenes["profession"] = profession.NewScene(g.state, g)
-	g.scenes["world"] = world.NewScene(g.state, g)
+	g.scenes["world"] = world.NewScene(g.state, g, assets)
 
 	// Set initial scene
 	g.currentScene = g.scenes["character_creation"]

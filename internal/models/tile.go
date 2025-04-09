@@ -10,6 +10,7 @@ const (
 )
 
 type TileInfo struct {
-	Type     TileType
-	Rotation int
+	OriginalType TileType
+	Type         TileType
+	Rotation     uint8
 }

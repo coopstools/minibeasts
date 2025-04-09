@@ -3,10 +3,11 @@ package tiles
 import (
 	"bytes"
 	"embed"
-	"image"
 	"image/png"
+	"math"
 	"sync"
 
+	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/pkg/errors"
 )
 
@@ -15,8 +16,8 @@ var tileset embed.FS
 
 var Load = sync.OnceValues(load)
 
-func load() (map[string]image.Image, error) {
-	tiles := make(map[string]image.Image)
+func load() (map[string][]*ebiten.Image, error) {
+	tiles := make(map[string][]*ebiten.Image)
 
 	files, err := tileset.ReadDir(".")
 	if err != nil {
@@ -34,7 +35,17 @@ func load() (map[string]image.Image, error) {
 		if err != nil {
 			return nil, errors.Wrapf(err, "failed to decode tile %s", file.Name())
 		}
-		tiles[file.Name()[:len(file.Name())-4]] = img
+		rotations := make([]*ebiten.Image, 4)
+		for i := 0; i < 4; i++ {
+			eimg := ebiten.NewImage(16, 16)
+			opt := &ebiten.DrawImageOptions{}
+			opt.GeoM.Translate(-8, -8)
+			opt.GeoM.Rotate(float64(i) * 90 * math.Pi / 180)
+			opt.GeoM.Translate(8, 8)
+			eimg.DrawImage(ebiten.NewImageFromImage(img), opt)
+			rotations[i] = eimg
+		}
+		tiles[file.Name()[:len(file.Name())-4]] = rotations
 	}
 
 	return tiles, nil

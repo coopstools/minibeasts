@@ -2,6 +2,8 @@ package models
 
 import (
 	"math/rand"
+
+	"github.com/coopstools/minibeast/internal/scenes"
 )
 
 type WorldData struct {
@@ -9,7 +11,7 @@ type WorldData struct {
 	// We'll add sprites and other persistent data here later
 }
 
-func NewWorldData(width, height int) *WorldData {
+func NewWorldData(width, height int, assets *scenes.SceneAssets) *WorldData {
 	tiles := make([][]TileInfo, height)
 	for y := range tiles {
 		tiles[y] = make([]TileInfo, width)
@@ -25,11 +27,12 @@ func NewWorldData(width, height int) *WorldData {
 			if r < 0.2 { // 20% chance of flowers
 				tileType = TileFlower
 			}
-			rotation := rand.Intn(4) * 90 // 0, 90, 180, or 270 degrees
+			rotation := uint8(rand.Intn(4)) // discrete rotation; index corresponds to rotation of 90 degrees
 
 			tiles[y][x] = TileInfo{
-				Type:     tileType,
-				Rotation: rotation,
+				OriginalType: tileType,
+				Type:         tileType,
+				Rotation:     rotation,
 			}
 		}
 	}
