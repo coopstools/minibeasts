@@ -19,6 +19,9 @@ type Scene struct {
 	hoveredTile  struct {
 		X, Y int
 	}
+	selectedTile struct {
+		X, Y int
+	}
 	popup *ui.Popup
 }
 
@@ -51,7 +54,7 @@ func (s *Scene) Draw(screen *ebiten.Image, assets *scenes.SceneAssets) {
 	}
 
 	if s.popup.Visible {
-		s.drawTileHighlight(screen, s.popup.X/16-1, s.popup.Y/16-1, color.RGBA{0, 0, 0, 255})
+		s.drawTileHighlight(screen, s.selectedTile.X, s.selectedTile.Y, color.RGBA{0, 0, 0, 255})
 	}
 	if s.isValidTilePosition(s.hoveredTile.X, s.hoveredTile.Y) {
 		s.drawTileHighlight(screen, s.hoveredTile.X, s.hoveredTile.Y, color.RGBA{255, 0, 0, 255})
@@ -94,6 +97,8 @@ func (s *Scene) Update() error {
 	// Handle mouse click for popup
 	if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
 		if s.isValidTilePosition(newX, newY) {
+			s.selectedTile = s.hoveredTile
+
 			tile := s.worldData.Tiles[newY][newX]
 			content := fmt.Sprintf("Tile Position: (%d, %d)\nType: %s\nRotation: %d°",
 				newX, newY, tile.Type, tile.Rotation*90)
