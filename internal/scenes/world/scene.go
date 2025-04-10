@@ -50,12 +50,11 @@ func (s *Scene) Draw(screen *ebiten.Image, assets *scenes.SceneAssets) {
 		}
 	}
 
+	if s.popup.Visible {
+		s.drawTileHighlight(screen, s.popup.X/16-1, s.popup.Y/16-1, color.RGBA{0, 0, 0, 255})
+	}
 	if s.isValidTilePosition(s.hoveredTile.X, s.hoveredTile.Y) {
 		s.drawTileHighlight(screen, s.hoveredTile.X, s.hoveredTile.Y, color.RGBA{255, 0, 0, 255})
-	}
-
-	if s.popup.Visible {
-		s.drawTileHighlight(screen, s.popup.X, s.popup.Y, color.RGBA{0, 255, 0, 255})
 	}
 
 	s.popup.Draw(screen, assets)
