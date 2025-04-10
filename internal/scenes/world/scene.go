@@ -33,7 +33,7 @@ func NewScene(gameState *models.GameState, sceneManager scenes.SceneManager, ass
 		worldData:    models.NewWorldData(worldWidth, worldHeight, assets),
 		gameState:    gameState,
 		sceneManager: sceneManager,
-		popup:        ui.NewPopup(300, 100),
+		popup:        ui.NewPopup(300, 100, assets),
 	}
 
 	return scene

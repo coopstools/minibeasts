@@ -15,13 +15,15 @@ type Popup struct {
 	Width, Height int
 	Content       string
 	Visible       bool
+	EnterButton   *Button
 }
 
-func NewPopup(width, height int) *Popup {
+func NewPopup(width, height int, assets *scenes.SceneAssets) *Popup {
 	return &Popup{
-		Width:   width,
-		Height:  height,
-		Visible: false,
+		Width:       width,
+		Height:      height,
+		Visible:     false,
+		EnterButton: NewButton(0, 0, 61, 20, "Enter", assets.Font),
 	}
 }
 
@@ -30,6 +32,8 @@ func (p *Popup) Show(x, y int, content string) {
 	p.Y = y
 	p.Content = content
 	p.Visible = true
+	p.EnterButton.X = x + p.Width - p.EnterButton.Width - 5
+	p.EnterButton.Y = y + p.Height - p.EnterButton.Height - 5
 }
 
 func (p *Popup) Hide() {
@@ -45,7 +49,7 @@ func (p *Popup) Draw(screen *ebiten.Image, assets *scenes.SceneAssets) {
 	vector.DrawFilledRect(screen,
 		float32(p.X), float32(p.Y),
 		float32(p.Width), float32(p.Height),
-		color.RGBA{0, 0, 0, 180}, // Dark semi-transparent background
+		color.RGBA{0, 0, 0, 180},
 		false)
 
 	// Draw border
@@ -63,4 +67,6 @@ func (p *Popup) Draw(screen *ebiten.Image, assets *scenes.SceneAssets) {
 		opts.GeoM.Translate(0, 20)
 		text.Draw(screen, line, xfont, opts)
 	}
+
+	p.EnterButton.Draw(screen)
 }
