@@ -10,14 +10,13 @@ import (
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
-	"github.com/hajimehoshi/ebiten/v2/text"
+	"github.com/hajimehoshi/ebiten/v2/text/v2"
 )
 
 type Scene struct {
 	gameState    *models.GameState
 	sceneManager scenes.SceneManager
 	selected     int
-	lastKeyPress time.Time
 	keyDelay     time.Duration
 }
 
@@ -82,7 +81,7 @@ func (s *Scene) Update() error {
 
 func (s *Scene) Draw(screen *ebiten.Image, assets *scenes.SceneAssets) {
 	screen.Fill(color.RGBA{40, 40, 40, 255})
-
+	font := text.NewGoXFace(assets.Font)
 	// Draw stats
 	stats := []string{
 		"Strength:  " + fmt.Sprint(s.gameState.Character.Strength),
@@ -91,17 +90,21 @@ func (s *Scene) Draw(screen *ebiten.Image, assets *scenes.SceneAssets) {
 	}
 
 	for i, stat := range stats {
-		y := 100 + i*30
+		opts := &text.DrawOptions{}
+		opts.GeoM.Translate(100, float64(100+i*30))
 		if i == s.selected {
-			text.Draw(screen, "> "+stat, assets.Font, 100, y, color.White)
+			text.Draw(screen, "> "+stat, font, opts)
 		} else {
-			text.Draw(screen, "  "+stat, assets.Font, 100, y, color.White)
+			text.Draw(screen, "  "+stat, font, opts)
 		}
 	}
 
 	// Draw instructions
-	text.Draw(screen, "Use arrow keys to navigate and modify stats", assets.Font, 100, 200, color.White)
+	opts := &text.DrawOptions{}
+	opts.GeoM.Translate(100, 200)
+	text.Draw(screen, "Use arrow keys to navigate and modify stats", font, opts)
 
 	// Add instruction for completing character creation
-	text.Draw(screen, "Press ENTER when finished", assets.Font, 100, 280, color.RGBA{180, 180, 180, 255})
+	opts.GeoM.Translate(100, 280)
+	text.Draw(screen, "Press ENTER when finished", font, opts)
 }
