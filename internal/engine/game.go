@@ -9,6 +9,7 @@ import (
 	"github.com/coopstools/minibeast/internal/scenes"
 	"github.com/coopstools/minibeast/internal/scenes/character_creation"
 	"github.com/coopstools/minibeast/internal/scenes/profession"
+	"github.com/coopstools/minibeast/internal/scenes/region"
 	"github.com/coopstools/minibeast/internal/scenes/world"
 	"github.com/hajimehoshi/ebiten/v2"
 )
@@ -42,7 +43,7 @@ func NewGame() *Game {
 	g.scenes["character_creation"] = character_creation.NewScene(g.state, g)
 	g.scenes["profession"] = profession.NewScene(g.state, g)
 	g.scenes["world"] = world.NewScene(g.state, g, assets)
-
+	g.scenes["region"] = region.NewScene(g.state, g)
 	// Set initial scene
 	g.currentScene = g.scenes["character_creation"]
 

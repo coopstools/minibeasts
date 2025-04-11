@@ -94,6 +94,19 @@ func (s *Scene) Update() error {
 		s.hoveredTile.Y = len(s.worldData.Tiles) - 1
 	}
 
+	if s.popup.Visible {
+		// Update button hover state
+		s.popup.EnterButton.Hovered = s.popup.EnterButton.Contains(x, y)
+
+		// Handle button click
+		if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
+			if s.popup.EnterButton.Contains(x, y) {
+				s.sceneManager.SwitchTo("region")
+				return nil
+			}
+		}
+	}
+
 	// Handle mouse click for popup
 	if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
 		if s.isValidTilePosition(newX, newY) {
