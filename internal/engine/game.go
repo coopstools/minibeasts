@@ -43,7 +43,7 @@ func NewGame() *Game {
 	g.scenes["character_creation"] = character_creation.NewScene(g.state, g)
 	g.scenes["profession"] = profession.NewScene(g.state, g)
 	g.scenes["world"] = world.NewScene(g.state, g, assets)
-	g.scenes["region"] = region.NewScene(g.state, g)
+	g.scenes["region"] = region.NewScene(g.state, g, assets)
 	// Set initial scene
 	g.currentScene = g.scenes["character_creation"]
 
