@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"log"
 	"os"
 
 	"github.com/coopstools/minibeast/internal/assets/fonts"
@@ -40,10 +41,10 @@ func NewGame() *Game {
 	}
 
 	// Initialize all scenes
-	g.scenes["character_creation"] = character_creation.NewScene(g.state, g)
-	g.scenes["profession"] = profession.NewScene(g.state, g)
-	g.scenes["world"] = world.NewScene(g.state, g, assets)
-	g.scenes["region"] = region.NewScene(g.state, g, assets)
+	g.scenes["character_creation"] = character_creation.New(g.state, g)
+	g.scenes["profession"] = profession.New(g.state, g)
+	g.scenes["world"] = world.New(g.state, g, assets)
+	g.scenes["region"] = region.New(g.state, g)
 	// Set initial scene
 	g.currentScene = g.scenes["character_creation"]
 
@@ -51,9 +52,20 @@ func NewGame() *Game {
 }
 
 func (g *Game) SwitchTo(sceneName string) {
+	if g.currentScene != nil {
+		g.currentScene.Unload()
+	}
+
 	if scene, exists := g.scenes[sceneName]; exists {
 		g.currentScene = scene
+		if err := g.currentScene.Load(); err != nil {
+			log.Printf("Failed to load scene %s: %v", sceneName, err)
+		}
 	}
+}
+
+func (g *Game) GetAssets() *scenes.SceneAssets {
+	return g.assets
 }
 
 func (g *Game) Update() error {

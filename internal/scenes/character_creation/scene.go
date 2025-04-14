@@ -23,7 +23,7 @@ type Scene struct {
 	nameBuffer   []rune
 }
 
-func NewScene(state *models.GameState, manager scenes.SceneManager) *Scene {
+func New(state *models.GameState, manager scenes.SceneManager) *Scene {
 	return &Scene{
 		gameState:    state,
 		sceneManager: manager,
@@ -31,6 +31,14 @@ func NewScene(state *models.GameState, manager scenes.SceneManager) *Scene {
 		keyDelay:     time.Millisecond * 200,
 		nameBuffer:   []rune(state.Character.Name),
 	}
+}
+
+func (s *Scene) Load() error {
+	return nil
+}
+
+func (s *Scene) Unload() error {
+	return nil
 }
 
 func (s *Scene) Update() error {

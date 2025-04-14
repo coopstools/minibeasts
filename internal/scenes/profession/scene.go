@@ -21,7 +21,7 @@ type Scene struct {
 	professions  []string
 }
 
-func NewScene(state *models.GameState, manager scenes.SceneManager) *Scene {
+func New(state *models.GameState, manager scenes.SceneManager) *Scene {
 	return &Scene{
 		gameState:    state,
 		sceneManager: manager,
@@ -29,6 +29,14 @@ func NewScene(state *models.GameState, manager scenes.SceneManager) *Scene {
 		keyDelay:     time.Millisecond * 200,
 		professions:  []string{"Farmer", "Miner", "Blacksmith", "Merchant"},
 	}
+}
+
+func (s *Scene) Load() error {
+	return nil
+}
+
+func (s *Scene) Unload() error {
+	return nil
 }
 
 func (s *Scene) Update() error {

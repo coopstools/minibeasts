@@ -7,6 +7,7 @@ import (
 
 type SceneManager interface {
 	SwitchTo(sceneName string)
+	GetAssets() *SceneAssets
 }
 
 type SceneAssets struct {
@@ -15,6 +16,8 @@ type SceneAssets struct {
 }
 
 type Scene interface {
+	Load() error
+	Unload() error
 	Update() error
 	Draw(screen *ebiten.Image, assets *SceneAssets)
 }

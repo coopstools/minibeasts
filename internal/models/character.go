@@ -2,6 +2,8 @@ package models
 
 import (
 	"math/rand"
+
+	"github.com/coopstools/minibeast/internal/models/properties"
 )
 
 type Character struct {
@@ -12,7 +14,7 @@ type Character struct {
 	Vitality     int
 	Intelligence int
 	StatPool     int
-	Health       *Health
+	Health       *properties.Health
 }
 
 const (
@@ -31,7 +33,7 @@ func NewCharacter() *Character {
 		Intelligence: BaseStatValue,
 		StatPool:     InitialStatPool,
 	}
-	c.Health = NewHealth(c.Vitality)
+	c.Health = properties.NewHealth(c.Vitality)
 	return c
 }
 
@@ -46,7 +48,7 @@ func NewMinCharacter() *Character {
 }
 
 func (c *Character) UpdateStats() {
-	c.Health = NewHealth(c.Vitality)
+	c.Health = properties.NewHealth(c.Vitality)
 }
 
 func generateRandomName() string {

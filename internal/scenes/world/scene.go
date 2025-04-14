@@ -25,7 +25,7 @@ type Scene struct {
 	popup *ui.Popup
 }
 
-func NewScene(gameState *models.GameState, sceneManager scenes.SceneManager, assets *scenes.SceneAssets) *Scene {
+func New(gameState *models.GameState, sceneManager scenes.SceneManager, assets *scenes.SceneAssets) *Scene {
 	worldWidth := 800 / 16
 	worldHeight := 600 / 16
 
@@ -37,6 +37,14 @@ func NewScene(gameState *models.GameState, sceneManager scenes.SceneManager, ass
 	}
 
 	return scene
+}
+
+func (s *Scene) Load() error {
+	return nil
+}
+
+func (s *Scene) Unload() error {
+	return nil
 }
 
 func (s *Scene) Draw(screen *ebiten.Image, assets *scenes.SceneAssets) {
