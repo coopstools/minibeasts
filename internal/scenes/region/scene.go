@@ -15,11 +15,12 @@ import (
 )
 
 type Scene struct {
-	gameState    *models.GameState
-	sceneManager scenes.SceneManager
-	playerPos    models.PlayerPosition
-	statsPopup   *ui.Popup
-	npcManager   *models.NPCManager
+	gameState     *models.GameState
+	sceneManager  scenes.SceneManager
+	playerPos     models.PlayerPosition
+	statsPopup    *ui.Popup
+	npcManager    *models.NPCManager
+	healthDisplay *ui.HealthDisplay
 }
 
 func NewScene(gameState *models.GameState, manager scenes.SceneManager, assets *scenes.SceneAssets) *Scene {
@@ -29,7 +30,8 @@ func NewScene(gameState *models.GameState, manager scenes.SceneManager, assets *
 		playerPos: models.PlayerPosition{
 			Position: properties.Position{X: 400, Y: 300}, // Start in middle of screen
 		},
-		npcManager: models.NewNPCManager(),
+		npcManager:    models.NewNPCManager(),
+		healthDisplay: ui.NewHealthDisplay(10, 20, assets.Font),
 	}
 
 	// Create a larger popup for character stats
@@ -80,6 +82,21 @@ func (s *Scene) Update() error {
 	// Update NPCs
 	s.npcManager.Update(s.playerPos.Position.X, s.playerPos.Position.Y)
 
+	// Check for NPC collisions and damage
+	for _, npc := range s.npcManager.NPCs {
+		dx := s.playerPos.Position.X - npc.Position.X
+		dy := s.playerPos.Position.Y - npc.Position.Y
+		dist := math.Sqrt(dx*dx + dy*dy)
+
+		if dist <= (models.PlayerSize+npc.Size)/2 {
+			if s.gameState.Character.Health.CanTakeDamage() {
+				s.gameState.Character.Health.TakeDamage(npc.DamageAmount)
+				// Apply knockback when taking damage
+				s.playerPos.ApplyKnockback(npc.Position.X, npc.Position.Y)
+			}
+		}
+	}
+
 	// Toggle stats popup with E key
 	if inpututil.IsKeyJustPressed(ebiten.KeyE) {
 		if !s.statsPopup.Visible {
@@ -111,6 +128,11 @@ func (s *Scene) Update() error {
 func (s *Scene) Draw(screen *ebiten.Image, assets *scenes.SceneAssets) {
 	// Draw background
 	screen.Fill(color.RGBA{20, 20, 40, 255})
+
+	// Draw health display
+	s.healthDisplay.Draw(screen,
+		s.gameState.Character.Health.Current,
+		s.gameState.Character.Health.Max)
 
 	// Draw NPCs
 	for _, npc := range s.npcManager.NPCs {
@@ -167,12 +189,18 @@ func (s *Scene) Draw(screen *ebiten.Image, assets *scenes.SceneAssets) {
 			false)
 	}
 
-	// Draw player
+	// Draw player with knockback effect
+	playerColor := color.RGBA{255, 0, 0, 255}
+	if s.playerPos.Knockback.Active {
+		// Flash white when in knockback
+		playerColor = color.RGBA{255, 255, 255, 255}
+	}
+
 	vector.DrawFilledCircle(screen,
 		float32(s.playerPos.Position.X+models.PlayerSize/2),
 		float32(s.playerPos.Position.Y+models.PlayerSize/2),
 		float32(models.PlayerSize/2),
-		color.RGBA{255, 0, 0, 255},
+		playerColor,
 		false)
 
 	// Draw stats popup if visible

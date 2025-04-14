@@ -105,6 +105,7 @@ func (s *Scene) Update() error {
 
 	// Scene transition
 	if inpututil.IsKeyJustPressed(ebiten.KeyEnter) && !s.nameEditing {
+		s.gameState.Character.UpdateStats()
 		s.sceneManager.SwitchTo("profession")
 	}
 

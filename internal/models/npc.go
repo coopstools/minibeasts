@@ -33,7 +33,10 @@ type NPC struct {
 	StateTimer     float64             // Renamed from WanderTimer for clarity
 	LastUpdate     time.Time           // For time-based updates
 	StartPos       properties.Position // Store starting position for wandering radius check
-	Mass           float64             // Added for push mechanics
+	Stats          *Character          // Add stats to NPCs
+	Health         *Health
+	DamageAmount   int
+	Mass           float64 // Added for push mechanics
 }
 
 const (
@@ -50,7 +53,7 @@ const (
 )
 
 func NewNPC(npcType NPCType, x, y float64) *NPC {
-	return &NPC{
+	npc := &NPC{
 		BaseEntity: BaseEntity{
 			Position: properties.Position{X: x, Y: y},
 			Size:     16.0,
@@ -62,8 +65,12 @@ func NewNPC(npcType NPCType, x, y float64) *NPC {
 		StateTimer:     rand.Float64()*(MaxWanderTime-MinWanderTime) + MinWanderTime,
 		LastUpdate:     time.Now(),
 		StartPos:       properties.Position{X: x, Y: y},
+		Stats:          NewMinCharacter(),
+		DamageAmount:   5,   // Base damage amount
 		Mass:           1.0, // Default mass, can be varied for different NPC types
 	}
+	npc.Health = NewHealth(npc.Stats.Vitality)
+	return npc
 }
 
 func (n *NPC) resolveCollisions(otherNPCs []*NPC) {
